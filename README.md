@@ -137,7 +137,7 @@ export domain=rfed.me
 
 # longhorn for stateful storage
 helm repo add longhorn https://charts.longhorn.io --force-update
-helm upgrade -i longhorn  longhorn/longhorn -n longhorn-system --create-namespace --set ingress.enabled=true --set ingress.host=longhorn2.$domain --set default.storageMinimalAvailablePercentage=25 --set default.storageOverProvisioningPercentage=200 --set defaultSettings.defaultReplicaCount=1
+helm upgrade -i longhorn  longhorn/longhorn -n longhorn-system --create-namespace --set ingress.enabled=true --set ingress.host=longhorn.$domain --set default.storageMinimalAvailablePercentage=25 --set default.storageOverProvisioningPercentage=200 --set defaultSettings.defaultReplicaCount=1
 ```
 
 ## ollama and openwebui
