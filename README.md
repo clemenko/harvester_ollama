@@ -61,6 +61,9 @@ lspci |grep -i nvidia
 
 # helm install
 curl -s https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+# reboot for the drivers
+reboot
 ```
 
 ## rke2 and longhorn and nvidia
