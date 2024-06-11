@@ -59,9 +59,6 @@ dnf module install nvidia-driver:latest-dkms -y
 # check for the nvidia card
 lspci |grep -i nvidia
 
-# helm install
-curl -s https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-
 # reboot for the drivers
 reboot
 ```
@@ -116,6 +113,9 @@ EOF
 
 # restart rke2
 systemctl restart rke2-server
+
+# helm install
+curl -s https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
 # nvidia operator
 helm repo add nvidia https://helm.ngc.nvidia.com/nvidia --force-update
