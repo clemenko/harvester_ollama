@@ -52,7 +52,7 @@ gpgcheck=0
 EOF
 
 # some required packages
-dnf install -y pciutils wget epel-release nfs-utils cryptsetup iscsi-initiator-utils
+dnf install -y pciutils epel-release nfs-utils cryptsetup iscsi-initiator-utils
 systemctl enable --now iscsid
 dnf module install nvidia-driver:latest-dkms -y
 
