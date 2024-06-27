@@ -127,9 +127,10 @@ helm upgrade -i gpu-operator -n gpu-operator --create-namespace nvidia/gpu-opera
      --set toolkit.env[2].name=CONTAINERD_RUNTIME_CLASS \
      --set toolkit.env[2].value=nvidia \
      --set toolkit.env[3].name=CONTAINERD_SET_AS_DEFAULT \
-     --set-string toolkit.env[3].value=true \
-     --set driver.enabled=false \
-     --set toolkit.enabled=false
+     --set-string toolkit.env[3].value=true 
+# \
+#     --set driver.enabled=false \
+#     --set toolkit.enabled=false
 ```
 
 And some storage with longhorn
