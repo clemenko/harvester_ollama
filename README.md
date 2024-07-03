@@ -154,7 +154,7 @@ helm repo add open-webui https://helm.openwebui.com/ --force-update
 helm repo add ollama-helm https://otwld.github.io/ollama-helm/ --force-update
 
 # ollama
-helm upgrade -i ollama ollama-helm/ollama -n ollama --create-namespace --set runtimeClassName=nvidia  --set ollama.gpu.enabled=true --set ollama.persistentVolume.enabled=true --set ollama.persistentVolume.size=30Gi --set ingress.enabled=true --set ingress.hosts[0].host=ollama.$domain --set ingress.hosts[0].paths[0].path=/ --set ingress.hosts[0].paths[0].pathType=Prefix
+helm upgrade -i ollama ollama-helm/ollama -n ollama --create-namespace --set runtimeClassName=nvidia  --set ollama.gpu.enabled=true --set persistentVolume.enabled=true --set persistentVolume.size=30Gi --set ingress.enabled=true --set ingress.hosts[0].host=ollama.$domain --set ingress.hosts[0].paths[0].path=/ --set ingress.hosts[0].paths[0].pathType=Prefix
 
 # openwebui
 helm upgrade -i open-webui open-webui/open-webui -n openwebui --create-namespace --set ingress.enabled=true --set ingress.host=webui.$domain  --set persistentVolume.enabled=true --set persistence.size=5Gi --set ollama.enabled=false --set ollamaUrls[0]=http://ollama.ollama.svc.cluster.local:11434
