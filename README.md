@@ -162,7 +162,7 @@ helm upgrade -i open-webui open-webui/open-webui -n openwebui --create-namespace
 # wait until web page is up
 
 # until.....
-curl -k https://webui.rfed.me/api/v1/auths/signup -H 'content-type: application/json' -d '{"name":"admin","email":"admin@rfed.io","password":"Pa22word"}'
+curl -k https://webui.rfed.me/api/v1/auths/signup -H 'content-type: application/json' -d '{"name":"admin","email":"admin@rfed.me","password":"Pa22word"}'
 ```
 
 
