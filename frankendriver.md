@@ -172,4 +172,7 @@ curl -sk https://webui.rfed.me/ollama/api/pull -H "Authorization: Bearer $webui_
 #curl -sk https://webui.rfed.me/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "qwen3.5:2b"}'
 #curl -sk https://webui.rfed.me/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "gemma4:e2b"}'
 
+# load into memory
+curl -sk https://webui.rfed.me/ollama/api/generate -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{ "model": "qwen2.5-coder:7b", "keep_alive": "30m" }'
+
 ```
