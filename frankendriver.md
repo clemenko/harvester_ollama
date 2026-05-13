@@ -167,10 +167,9 @@ curl -k https://webui.rfed.me/api/v1/auths/signup -H 'content-type: application/
 webui_token=$(curl -sk -X POST https://webui.rfed.me/api/v1/auths/signin -H 'Content-Type: application/json' -d '{"email":"admin@rfed.me","password":"Pa22word"}' | jq -r .token)
 
 # pull models
-curl -sk https://webui.rfed.me/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "llama3.2:1b"}'
-curl -sk https://webui.rfed.me/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "qwen3.5:2b"}'
-curl -sk https://webui.rfed.me/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "gemma4:e2b"}'
-curl -sk https://webui.rfed.me/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "kimi-k2.6"}'
 curl -sk https://webui.rfed.me/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "qwen2.5-coder:7b"}'
+#curl -sk https://webui.rfed.me/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "llama3.2:1b"}'
+#curl -sk https://webui.rfed.me/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "qwen3.5:2b"}'
+#curl -sk https://webui.rfed.me/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "gemma4:e2b"}'
 
 ```
