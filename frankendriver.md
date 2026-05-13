@@ -160,12 +160,13 @@ helm upgrade -i open-webui open-webui --repo https://helm.openwebui.com/ -n open
 # wait until web page is up
 
 # until.....
+# create user
 curl -k https://webui.rfed.me/api/v1/auths/signup -H 'content-type: application/json' -d '{"name":"admin","email":"admin@rfed.me","password":"Pa22word"}'
 
-curl -X POST -k https://webui.rfed.me/api/v1/models/load -H 'content-type: application/json' -d '{"model": {"data": "llama3.2:1b"}}'
+# get token
+webui_token=$(curl -sk -X POST https://webui.rfed.me/api/v1/auths/signin -H 'Content-Type: application/json' -d '{"email":"admin@rfed.me","password":"Pa22word"}' | jq -r .token)
 
+# pull model
+curl -sk https://webui.rfed.me/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "llama3.2:1b"}' > /dev/null 2>&1
 
-  https://your-openwebui-instance.com/models/load \
-  -H 'Content-Type: application/json' \
-  -d '{"model": {"data": "your_model_data_here"}}'
 ```
