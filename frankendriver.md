@@ -41,7 +41,7 @@ Let's do a little kernel tuning. This is from my days at Docker. ;)
 curl -sLo /etc/sysctl.conf https://raw.githubusercontent.com/clemenko/hobbyfarm/main/kernel_tuning.txt
 sysctl -p
 
-dnf install -y wget kernel-devel kernel-headers kernel-modules 'libglvnd*' dkms acpid pkgconfig tar bzip2 make automake gcc gcc-c++ pciutils elfutils-libelf-devel nfs-utils cryptsetup iscsi-initiator-utils epel-release iptables-services iptables-utils device-mapper-multipath
+dnf install -y wget kernel-devel kernel-headers kernel-modules 'libglvnd*' dkms acpid pkgconfig tar bzip2 make automake gcc gcc-c++ pciutils elfutils-libelf-devel nfs-utils cryptsetup iscsi-initiator-utils epel-release iptables-services iptables-utils device-mapper-multipath nvtop
 
 dnf install -y nvtop jq
 
