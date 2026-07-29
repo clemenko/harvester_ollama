@@ -45,11 +45,12 @@ dnf install -y wget kernel-devel kernel-headers kernel-modules 'libglvnd*' dkms 
 
 dnf install -y nvtop jq
 
-wget https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/d/yX0yj-Z4R3_dfw -O NVIDIA-Linux-x86_64-595.80.run
-chmod a+x NVIDIA-Linux-x86_64-595.80.run
+#wget https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/d/yX0yj-Z4R3_dfw -O NVIDIA-Linux-x86_64-595.80.run
+wget https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/d/IjTHqNvapivkeA -O NVIDIA-Linux-x86_64-595.84.run
+chmod a+x NVIDIA-Linux-x86_64-595.84.run
  
 # install deriver
-./NVIDIA-Linux-x86_64-595.80.run --silent --dkms --rebuild-initramfs --accept-license --kernel-module-type=open --no-install-compat32-libs
+./NVIDIA-Linux-x86_64-595.84.run --silent --dkms --rebuild-initramfs --accept-license --kernel-module-type=open --no-install-compat32-libs
 
 # reboot to load the kernel module
 reboot
