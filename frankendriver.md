@@ -43,7 +43,7 @@ sysctl -p
 
 dnf install -y wget kernel-devel kernel-headers kernel-modules 'libglvnd*' dkms acpid pkgconfig tar bzip2 make automake gcc gcc-c++ pciutils elfutils-libelf-devel nfs-utils cryptsetup iscsi-initiator-utils epel-release iptables-services iptables-utils device-mapper-multipath
 
-dnf install -y nvtop jq
+dnf install -y nvtop
 
 #wget https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/d/yX0yj-Z4R3_dfw -O NVIDIA-Linux-x86_64-595.80.run
 wget https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/d/IjTHqNvapivkeA -O NVIDIA-Linux-x86_64-595.84.run
@@ -94,6 +94,9 @@ helm upgrade -i gpu-operator gpu-operator --repo https://helm.ngc.nvidia.com/nvi
 ```bash
 kubectl -n gpu-operator wait --for=condition=ready pod -l app=nvidia-operator-validator --timeout=600s
 kubectl get node -o json | jq '.items[].status.allocatable["nvidia.com/gpu"]'
+
+# may need to reboot. 
+reboot
 ```
 
 ## stateful storage
