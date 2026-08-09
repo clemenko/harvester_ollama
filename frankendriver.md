@@ -131,12 +131,12 @@ curl -k https://webui.$domain/api/v1/auths/signup -H 'content-type: application/
 webui_token=$(curl -sk -X POST https://webui.$domain/api/v1/auths/signin -H 'Content-Type: application/json' -d '{"email":"admin@'$domain'","password":"Pa22word"}' | jq -r .token)
 
 # pull models
-curl -sk https://webui.$domain/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "qwen2.5-coder:7b"}'
+#curl -sk https://webui.$domain/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "qwen2.5-coder:7b"}'
 #curl -sk https://webui.$domain/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "llama3.2:1b"}'
 #curl -sk https://webui.$domain/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "qwen3.5:2b"}'
-#curl -sk https://webui.$domain/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "gemma4:e2b"}'
+curl -sk https://webui.$domain/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "gemma4:e2b"}'
 
 # load into memory
-curl -sk https://webui.$domain/ollama/api/generate -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{ "model": "qwen2.5-coder:7b", "keep_alive": "30m" }'
+curl -sk https://webui.$domain/ollama/api/generate -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{ "model": "gemma4:e2b", "keep_alive": "30m" }'
 
 ```
