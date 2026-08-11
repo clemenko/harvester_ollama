@@ -48,12 +48,12 @@ dnf install -y nvtop
 #wget https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/d/yX0yj-Z4R3_dfw -O NVIDIA-Linux-x86_64-595.80.run
 wget https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/d/IjTHqNvapivkeA -O NVIDIA-Linux-x86_64-595.84.run
 chmod a+x NVIDIA-Linux-x86_64-595.84.run
+
+# reboot for good measure
+reboot
  
 # install deriver
 ./NVIDIA-Linux-x86_64-595.84.run --silent --dkms --rebuild-initramfs --accept-license --kernel-module-type=open --no-install-compat32-libs
-
-# reboot to load the kernel module
-reboot
 ```
 
 After reboot, verify the driver:
@@ -70,6 +70,9 @@ dnf install kernel-modules-extra-$(uname -r) -y ; modprobe ip_tables && curl -sf
 
 # check 
 kubectl get node
+
+# another, yes reboot
+reboot
 ```
 
 We can wait a hot second to make sure rke2 comes up.  
@@ -94,9 +97,6 @@ helm upgrade -i gpu-operator gpu-operator --repo https://helm.ngc.nvidia.com/nvi
 ```bash
 kubectl -n gpu-operator wait --for=condition=ready pod -l app=nvidia-operator-validator --timeout=600s
 kubectl get node -o json | jq '.items[].status.allocatable["nvidia.com/gpu"]'
-
-# may need to reboot. 
-reboot
 ```
 
 ## stateful storage
