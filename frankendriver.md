@@ -45,20 +45,16 @@ dnf install -y wget kernel-devel kernel-headers kernel-modules 'libglvnd*' dkms 
 
 dnf install -y nvtop
 
+systemctl enable --now iscsid
+
 #wget https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/d/yX0yj-Z4R3_dfw -O NVIDIA-Linux-x86_64-595.80.run
 wget https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/d/IjTHqNvapivkeA -O NVIDIA-Linux-x86_64-595.84.run
 chmod a+x NVIDIA-Linux-x86_64-595.84.run
-
-# reboot for good measure
-reboot
  
 # install deriver
 ./NVIDIA-Linux-x86_64-595.84.run --silent --dkms --rebuild-initramfs --accept-license --kernel-module-type=open --no-install-compat32-libs
-```
 
-After reboot, verify the driver:
-
-```bash
+#verify the driver:
 nvidia-smi
 ```
 
@@ -70,31 +66,16 @@ dnf install kernel-modules-extra-$(uname -r) -y ; modprobe ip_tables && curl -sf
 
 # check 
 kubectl get node
-
-# another, yes reboot
-reboot
 ```
 
 We can wait a hot second to make sure rke2 comes up.  
 Now we can add some nvidia stuff.
 
 ```bash
-# nvidia operator - the toolkit writes the containerd config for us
-helm upgrade -i gpu-operator gpu-operator --repo https://helm.ngc.nvidia.com/nvidia -n gpu-operator --create-namespace  \
-     --set toolkit.env[0].name=CONTAINERD_CONFIG \
-     --set toolkit.env[0].value=/var/lib/rancher/rke2/agent/etc/containerd/config.toml.tmpl \
-     --set toolkit.env[1].name=CONTAINERD_SOCKET \
-     --set toolkit.env[1].value=/run/k3s/containerd/containerd.sock \
-     --set toolkit.env[2].name=CONTAINERD_RUNTIME_CLASS \
-     --set toolkit.env[2].value=nvidia \
-     --set toolkit.env[3].name=CONTAINERD_SET_AS_DEFAULT \
-     --set-string toolkit.env[3].value=true \
-     --set driver.enabled=false 
-```
+# nvidia operator
+helm upgrade -i gpu-operator gpu-operator --repo https://helm.ngc.nvidia.com/nvidia -n gpu-operator --create-namespace --set driver.enabled=false --set cdi.nriPluginEnabled=true
 
-## wait and reboot
-
-```bash
+## wait
 kubectl -n gpu-operator wait --for=condition=ready pod -l app=nvidia-operator-validator --timeout=600s
 kubectl get node -o json | jq '.items[].status.allocatable["nvidia.com/gpu"]'
 ```
@@ -116,13 +97,16 @@ With Longhorn and the Nvidia drivers/operator installed we can now deploy Ollama
 
 ```bash
 # ollama
-helm upgrade -i ollama ollama --repo https://otwld.github.io/ollama-helm/  -n ollama --create-namespace --set runtimeClassName=nvidia  --set ollama.gpu.enabled=true --set persistentVolume.enabled=true --set persistentVolume.size=30Gi --set ingress.enabled=true --set ingress.hosts[0].host=ollama.$domain --set ingress.hosts[0].paths[0].path=/ --set ingress.hosts[0].paths[0].pathType=Prefix
+helm upgrade -i ollama ollama --repo https://otwld.github.io/ollama-helm/  -n ollama --create-namespace --set ollama.gpu.enabled=true --set persistentVolume.enabled=true --set persistentVolume.size=30Gi --set ingress.enabled=true --set ingress.hosts[0].host=ollama.$domain --set ingress.hosts[0].paths[0].path=/ --set ingress.hosts[0].paths[0].pathType=Prefix
 
 # openwebui
 helm upgrade -i open-webui open-webui --repo https://helm.openwebui.com/ -n openwebui --create-namespace --set ingress.enabled=true --set ingress.host=webui.$domain  --set persistence.enabled=true --set persistence.size=5Gi --set ollama.enabled=false --set ollamaUrls[0]=http://ollama.ollama.svc.cluster.local:11434
 
 # wait until web page is up
 until curl -sk https://webui.$domain/health | grep -q true; do sleep 5; done
+
+# add etc hosts
+echo $(hostname -I | awk '{print $1}')" longhorn.xpure.me ollama.xpure.me webui.xpure.me" >> /etc/hosts
 
 # create user
 curl -k https://webui.$domain/api/v1/auths/signup -H 'content-type: application/json' -d '{"name":"admin","email":"admin@'$domain'","password":"Pa22word"}'
@@ -133,7 +117,7 @@ webui_token=$(curl -sk -X POST https://webui.$domain/api/v1/auths/signin -H 'Con
 # pull models
 #curl -sk https://webui.$domain/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "qwen2.5-coder:7b"}'
 #curl -sk https://webui.$domain/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "llama3.2:1b"}'
-#curl -sk https://webui.$domain/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "qwen3.5:2b"}'
+#curl -sk https://webui.$domain/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "qwen3.5:4b"}'
 curl -sk https://webui.$domain/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "gemma4:e2b"}'
 
 # load into memory
