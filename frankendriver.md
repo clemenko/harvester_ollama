@@ -117,10 +117,10 @@ webui_token=$(curl -sk -X POST https://webui.$domain/api/v1/auths/signin -H 'Con
 # pull models
 #curl -sk https://webui.$domain/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "qwen2.5-coder:7b"}'
 #curl -sk https://webui.$domain/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "llama3.2:1b"}'
-#curl -sk https://webui.$domain/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "qwen3.5:4b"}'
-curl -sk https://webui.$domain/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "gemma4:e2b"}'
+curl -sk https://webui.$domain/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "qwen3.5:9b"}'
+#curl -sk https://webui.$domain/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "gemma4:e2b"}'
 
 # load into memory
-curl -sk https://webui.$domain/ollama/api/generate -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{ "model": "gemma4:e2b", "keep_alive": "30m" }'
+curl -sk https://webui.$domain/ollama/api/generate -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{ "model": "qwen3.5:9b", "keep_alive": "30m" }'
 
 ```
