@@ -47,12 +47,12 @@ dnf install -y nvtop
 
 systemctl enable --now iscsid
 
-#wget https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/d/yX0yj-Z4R3_dfw -O NVIDIA-Linux-x86_64-595.80.run
-wget https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/d/IjTHqNvapivkeA -O NVIDIA-Linux-x86_64-595.84.run
-chmod a+x NVIDIA-Linux-x86_64-595.84.run
+#wget https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/d/IjTHqNvapivkeA -O NVIDIA-Linux-x86_64-595.84.run
+wget https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/d/WBOV0nM7jWtXtg -O NVIDIA-Linux-x86_64-595.99.02.run
+chmod a+x NVIDIA-Linux-x86_64-595.99.02.run
  
 # install deriver
-./NVIDIA-Linux-x86_64-595.84.run --silent --dkms --rebuild-initramfs --accept-license --kernel-module-type=open --no-install-compat32-libs
+./NVIDIA-Linux-x86_64-595.99.02.run --silent --dkms --rebuild-initramfs --accept-license --kernel-module-type=open --no-install-compat32-libs
 
 #verify the driver:
 nvidia-smi
