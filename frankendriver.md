@@ -97,10 +97,14 @@ With Longhorn and the Nvidia drivers/operator installed we can now deploy Ollama
 
 ```bash
 # ollama
-helm upgrade -i ollama ollama --repo https://otwld.github.io/ollama-helm/  -n ollama --create-namespace --set ollama.gpu.enabled=true --set persistentVolume.enabled=true --set persistentVolume.size=30Gi --set ingress.enabled=true --set ingress.hosts[0].host=ollama.$domain --set ingress.hosts[0].paths[0].path=/ --set ingress.hosts[0].paths[0].pathType=Prefix
+helm upgrade -i ollama ollama --repo https://otwld.github.io/ollama-helm/  -n ollama --create-namespace --set ollama.gpu.enabled=true --set persistentVolume.enabled=true --set persistentVolume.size=30Gi --set ingress.enabled=true --set ingress.hosts[0].host=ollama.$domain --set ingress.hosts[0].paths[0].path=/ --set ingress.hosts[0].paths[0].pathType=Prefix   --set "extraEnv[0].name=OLLAMA_CONTEXT_LENGTH" --set-string "extraEnv[0].value=16384"
 
 # openwebui
-helm upgrade -i open-webui open-webui --repo https://helm.openwebui.com/ -n openwebui --create-namespace --set ingress.enabled=true --set ingress.host=webui.$domain  --set persistence.enabled=true --set persistence.size=5Gi --set ollama.enabled=false --set ollamaUrls[0]=http://ollama.ollama.svc.cluster.local:11434
+helm upgrade -i open-webui open-webui --repo https://helm.openwebui.com/ -n openwebui --create-namespace --set ingress.enabled=true --set ingress.host=webui.$domain  --set persistence.enabled=true --set persistence.size=5Gi --set ollama.enabled=false --set ollamaUrls[0]=http://ollama.ollama.svc.cluster.local:11434 --set "extraEnvVars[0].name=ENABLE_WEB_SEARCH" --set-string "extraEnvVars[0].value=true" --set "extraEnvVars[1].name=WEB_SEARCH_ENGINE" --set-string "extraEnvVars[1].value=duckduckgo"
+
+helm upgrade --install open-webui open-webui/open-webui -n <namespace> --reuse-values \
+  --set "extraEnvVars[0].name=ENABLE_WEB_SEARCH" --set-string "extraEnvVars[0].value=true" \
+  --set "extraEnvVars[1].name=WEB_SEARCH_ENGINE" --set-string "extraEnvVars[1].value=duckduckgo"
 
 # wait until web page is up
 until curl -sk https://webui.$domain/health | grep -q true; do sleep 5; done
@@ -117,10 +121,10 @@ webui_token=$(curl -sk -X POST https://webui.$domain/api/v1/auths/signin -H 'Con
 # pull models
 #curl -sk https://webui.$domain/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "qwen2.5-coder:7b"}'
 #curl -sk https://webui.$domain/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "llama3.1:8b"}'
-curl -sk https://webui.$domain/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "qwen3.5:9b"}'
+curl -sk https://webui.$domain/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "qwen3:8b"}'
 #curl -sk https://webui.$domain/ollama/api/pull -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{"model": "gemma4:e2b"}'
 
 # load into memory
-curl -sk https://webui.$domain/ollama/api/generate -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{ "model": "qwen3.5:9b", "keep_alive": "30m" }'
+curl -sk https://webui.$domain/ollama/api/generate -H "Authorization: Bearer $webui_token" -H 'content-type: application/json' -d '{ "model": "qwen3:8b", "keep_alive": "30m" }'
 
 ```
